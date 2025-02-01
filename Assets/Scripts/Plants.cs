@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum TypePlants {
     type1,
@@ -11,6 +12,26 @@ public class Plants : MonoBehaviour
 {
     public bool isType1;
     public bool isType2;
+
+    private InputAction selectAction;
+    private Camera mainCamera;
+    private GameObject selectedPlant;
+
+    public LayerMask plantLayer; 
+    public LayerMask groundLayer;
+
+    private void Start()
+    {
+        selectAction = InputSystem.actions.FindAction("Interact");
+    }
+
+    private void Update()
+    {
+        if (selectAction != null && selectAction.WasPressedThisFrame())
+        {
+            PlacePlant();
+        }
+    }
 
 
     public void ChangeType(TypePlants type)
@@ -32,6 +53,21 @@ public class Plants : MonoBehaviour
     public void ButtonType2()
     {
         ChangeType(TypePlants.type2);
+    }
+
+    private void PlacePlant()
+    {
+        Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, plantLayer))
+        {
+            selectedPlant = hit.collider.gameObject; 
+        }
+        else if (selectedPlant != null && Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayer))
+        {
+            selectedPlant.transform.position = hit.point; 
+        }
     }
 
 }

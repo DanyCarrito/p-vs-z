@@ -123,3 +123,4 @@ MonoBehaviour:
   speed: 1.5
   speedEnemy1: 1
   speedEnemy2: 3
+  destroyTime: 25

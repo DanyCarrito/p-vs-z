@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
     public float speed;
     public float speedEnemy1;
     public float speedEnemy2;
+    public float destroyTime;
 
 
     private void Start()
@@ -26,10 +27,12 @@ public class Enemy : MonoBehaviour
         {
             ChangeType(TypeEnemies.enemy2);
         }
+        Destroy(this.gameObject, destroyTime);
     }
     void Update()
     {
         transform.Translate(Vector3.left * speed * Time.deltaTime);
+
     }
 
 
