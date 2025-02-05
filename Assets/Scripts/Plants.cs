@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,25 +13,33 @@ public class Plants : MonoBehaviour
 {
     public bool isType1;
     public bool isType2;
+    public bool isTouchPressed = false;
+    private float bounce = 0;
+    private const float dTime = 0.1f;
+    public  GameObject selectedPlant;
+    public Transform myPosition;
 
     private InputAction selectAction;
     private Camera mainCamera;
-    private GameObject selectedPlant;
 
     public LayerMask plantLayer; 
     public LayerMask groundLayer;
 
     private void Start()
     {
-        selectAction = InputSystem.actions.FindAction("Interact");
+        selectAction = InputSystem.actions.FindAction("Place");
     }
 
     private void Update()
     {
-        if (selectAction != null && selectAction.WasPressedThisFrame())
+       
+        selectAction.performed += context =>
         {
-            PlacePlant();
-        }
+            Instantiate(selectedPlant, myPosition.position, Quaternion.identity);
+            Debug.Log("lol");
+        };
+        float touchValue = selectAction.ReadValue<float>();
+
     }
 
 
