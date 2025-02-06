@@ -14,12 +14,11 @@ public class Plants : MonoBehaviour
     public bool isType1;
     public bool isType2;
     public bool isTouchPressed = false;
-    private float bounce = 0;
-    private const float dTime = 0.1f;
     public  GameObject selectedPlant;
     public Transform myPosition;
 
     private InputAction selectAction;
+    private InputAction pressPos;
     private Camera mainCamera;
 
     public LayerMask plantLayer; 
@@ -28,6 +27,7 @@ public class Plants : MonoBehaviour
     private void Start()
     {
         selectAction = InputSystem.actions.FindAction("Place");
+        pressPos = InputSystem.actions.FindAction("PressPosition");
     }
 
     private void Update()
@@ -35,10 +35,12 @@ public class Plants : MonoBehaviour
        
         selectAction.performed += context =>
         {
-            Instantiate(selectedPlant, myPosition.position, Quaternion.identity);
+            //PlacePlant();
             Debug.Log("lol");
         };
         float touchValue = selectAction.ReadValue<float>();
+        Vector2 pos = pressPos.ReadValue<Vector2>();
+        Debug.Log(pos);
 
     }
 
@@ -66,17 +68,18 @@ public class Plants : MonoBehaviour
 
     private void PlacePlant()
     {
-        Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-        RaycastHit hit;
+        ////Vector2 pos = pressPos.ReadValue<Vector2>();
+        ////Ray ray = mainCamera.ScreenPointToRay(pos);
+        //RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, plantLayer))
-        {
-            selectedPlant = hit.collider.gameObject; 
-        }
-        else if (selectedPlant != null && Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayer))
-        {
-            selectedPlant.transform.position = hit.point; 
-        }
+        //if (Physics.Raycast(ray, out hit, Mathf.Infinity, plantLayer))
+        //{
+        //    Instantiate(selectedPlant, hit.point, Quaternion.identity);
+        //}
+        ////else if (selectedPlant != null && Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayer))
+        ////{
+        ////    selectedPlant.transform.position = hit.point; 
+        ////}
     }
 
 }
